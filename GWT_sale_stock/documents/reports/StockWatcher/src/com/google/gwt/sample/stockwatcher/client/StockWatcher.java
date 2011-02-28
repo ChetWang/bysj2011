@@ -40,6 +40,12 @@ import java.util.ArrayList;
 import com.google.gwt.user.client.Timer;
 //写refreshWatchList（）方法时用到
 import com.google.gwt.user.client.Random;
+//实现方法updateTable(StockPrice).时用到
+import com.google.gwt.i18n.client.NumberFormat;
+//添加时间戳的时候用到
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
+
 
 
 /**
@@ -162,9 +168,41 @@ public class StockWatcher implements EntryPoint {
 
 			    updateTable(prices);
 			  }
-		  private void updateTable(StockPrice[] prices) {
-			    // TODO Auto-generated method stub
+		  //实现该方法updateTable（StockPrices []） 
+		  private void updateTable(StockPrice[] prices) {  //数组做参数
+			   for (int i = 0; i < prices.length; i++) {
+				      updateTable(prices[i]);//刚开始这里会出错是因为方法updateTable还没定义
+				    }
+			// 添加时间戳，用一个Label控件，lastUpdatedLabel，创建用户界面中的时间戳。 
+			   //现在设置为标签控件的文本。
+			    lastUpdatedLabel.setText("Last update : "
+			        + DateTimeFormat.getMediumDateTimeFormat().format(new Date()));
+			  }
+		  //实现方法updateTable(StockPrice),更新一个表中单列的股票数据
+		  private void updateTable(StockPrice price) {
+			    // 确保该股票的这个表数据存在
+			    if (!stocks.contains(price.getSymbol())) {
+			      return;
+			    }
 
+			    int row = stocks.indexOf(price.getSymbol()) + 1;
+
+			    // 使Price和Change这列的数据格式化，统一变成0.00的格式，带两位小数
+			    String priceText = NumberFormat.getFormat("#,##0.00").format(
+			        price.getPrice());
+			    NumberFormat changeFormat = NumberFormat.getFormat("+#,##0.00;-#,##0.00");
+			    String changeText = changeFormat.format(price.getChange());
+			    /*这里有个bug，该changePercentText变量的值被设置其他地方price.getChangePercent,
+			     * 以致Change这列的变化率 只有1/10的正确值的大小，因此需要调试。
+			     * 下面就是调试的方法
+	             *因此，首先在该行设置一个断点，然后深入地判断出在计算变化的百分比误差。 
+                 */
+			    String changePercentText = changeFormat.format(price.getChangePercent());
+
+			    // 把新数据填入Price和Change 这两列.
+			    stocksFlexTable.setText(row, 1, priceText);
+			    stocksFlexTable.setText(row, 2, changeText + " (" + changePercentText
+			        + "%)");
 			  }
 
 	  }
