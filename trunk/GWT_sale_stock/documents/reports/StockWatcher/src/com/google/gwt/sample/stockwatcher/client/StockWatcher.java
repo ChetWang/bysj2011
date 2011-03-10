@@ -73,7 +73,7 @@ public class StockWatcher implements EntryPoint {
 		  stocksFlexTable.setText(0, 1, "Price");
 		  stocksFlexTable.setText(0, 2, "Change");
 		  stocksFlexTable.setText(0, 3, "Remove");
-		  
+		  stocksFlexTable.setCellPadding(6);
 		  
 		  // 添加表样式列表中的元素的股票
 		    stocksFlexTable.getRowFormatter().addStyleName(0, "watchListHeader");
