@@ -73,9 +73,24 @@ public class StockWatcher implements EntryPoint {
 		  stocksFlexTable.setText(0, 1, "Price");
 		  stocksFlexTable.setText(0, 2, "Change");
 		  stocksFlexTable.setText(0, 3, "Remove");
+		  
+		  
+		  // 添加表样式列表中的元素的股票
+		    stocksFlexTable.getRowFormatter().addStyleName(0, "watchListHeader");
+		    //在StockWatcher.css里增加了watchList监听后要在这里调用这个监听，所以加了下面这句
+		    stocksFlexTable.addStyleName("watchList");
+		    /*设置股票列表的Price和Change两列的字右对齐时，
+		    在StockWatcher.css里增加了watchListNumericColumn样式规则,在这里调用*/
+		    stocksFlexTable.getCellFormatter().addStyleName(0, 1, "watchListNumericColumn");
+		    stocksFlexTable.getCellFormatter().addStyleName(0, 2, "watchListNumericColumn");
+		    //设置按钮这列，把按钮居中时，在StockWatcher.css里增加了watchListNumericColumn样式规则,在这里调用
+		    stocksFlexTable.getCellFormatter().addStyleName(0, 3, "watchListRemoveColumn");
+		    
 	    //  组装添加股票面板
 		  addPanel.add(newSymbolTextBox);
 		  addPanel.add(addStockButton);
+		  /*设置扩大添加股票的面板周围的边缘后，在StockWatcher.css里增加了addPanel样式规则，在这里调用*/
+		  addPanel.addStyleName("addPanel");
 	    //  组装主要面板
 		  mainPanel.add(stocksFlexTable);
 		  mainPanel.add(addPanel);
@@ -138,8 +153,16 @@ public class StockWatcher implements EntryPoint {
 			    int row = stocksFlexTable.getRowCount();
 			    stocks.add(symbol);
 			    stocksFlexTable.setText(row, 0, symbol);
+			    //
+			    stocksFlexTable.setWidget(row, 2, new Label());
+			    //在onModuleLoad()方法里设置完列的样式，现在给行设置同样的样式
+			    stocksFlexTable.getCellFormatter().addStyleName(row, 1, "watchListNumericColumn");
+			    stocksFlexTable.getCellFormatter().addStyleName(row, 2, "watchListNumericColumn");
+			    stocksFlexTable.getCellFormatter().addStyleName(row, 3, "watchListRemoveColumn");
 			     //添加一个按钮，从表删除该股票。 
 			    Button removeStockButton = new Button("x");
+			    //
+			    removeStockButton.addStyleDependentName("remove");
 			    removeStockButton.addClickHandler(new ClickHandler() {
 			      public void onClick(ClickEvent event) {
 			        int removedIndex = stocks.indexOf(symbol);
@@ -201,9 +224,23 @@ public class StockWatcher implements EntryPoint {
 
 			    // 把新数据填入Price和Change 这两列.
 			    stocksFlexTable.setText(row, 1, priceText);
-			    stocksFlexTable.setText(row, 2, changeText + " (" + changePercentText
-			        + "%)");
+			    //stocksFlexTable.setText(row, 2, changeText + " (" + changePercentText
+			       // + "%)");   原本是这段，改成下面这段
+			    Label changeWidget = (Label)stocksFlexTable.getWidget(row, 2);
+			    changeWidget.setText(changeText + " (" + changePercentText + "%)");
+			    
+			 // 设置Change这列的字体颜色，字体颜色是随着它的值而变化的
+			    String changeStyleName = "noChange";
+			    if (price.getChangePercent() < -0.1f) {
+			      changeStyleName = "negativeChange";
+			    }
+			    else if (price.getChangePercent() > 0.1f) {
+			      changeStyleName = "positiveChange";
+			    }
+
+			    changeWidget.setStyleName(changeStyleName);
 			  }
+		  
 
 	  }
 	
