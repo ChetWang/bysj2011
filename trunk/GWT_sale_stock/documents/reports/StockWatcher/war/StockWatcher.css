@@ -1,34 +1,50 @@
-/** Add css rules here for your application. */
+/*用了下面整段代码代替了StockWatcher.css原来的内容*/
+/*格式化具体到StockWatcher应用程序*/
 
-
-/** Example rules used by the template application (remove for your app) */
-h1 {
-  font-size: 2em;
-  font-weight: bold;
-  color: #777777;
-  margin: 40px 0px 70px;
-  text-align: center;
+body {
+  padding: 10px;   //内部边距
 }
 
-.sendButton {
-  display: block;
-  font-size: 16pt;
+/*股票列表标题行*/
+.watchListHeader {
+  background-color: #2062B8;  //背景颜色
+  color: white;            //字体颜色：白色
+  font-style: italic;   //字体样式：斜体
+}
+/*在股票列表周围放置边框*/
+.watchList {       
+  border: 1px solid silver;    //边界：1px固定值
+  padding: 2px;          //内部边距：2个像素
+  margin-bottom:6px;     //底部的边距：6个像素
+}
+/*把股票列表的Price和Change两列的字右对齐*/
+.watchListNumericColumn {
+  text-align: right;  //水平对齐方式：右对齐
+  width:8em;           //表格中的列的宽度：8em
+}
+/*把股票列表的Remove这列的按钮居中*/
+.watchListRemoveColumn{
+  text-align: center;  //水平对齐方式：居中
 }
 
-/** Most GWT widgets already have a style name defined */
-.gwt-DialogBox {
-  width: 400px;
+/*扩大添加股票的面板周围的边缘*/
+.addPanel {
+  margin: 10px 0px 15px 0px;  //外部边距：上、下、左、右
+}
+/* stock list, the Remove button */
+.gwt-Button-remove {
+  width: 50px;
+}
+/*动态改变Change这列的字体颜色，写完下面的，然后去 updateTable(StockPrice price)方法里写相应的*/
+.noChange {
+  color: black;
 }
 
-.dialogVPanel {
-  margin: 5px;
+.positiveChange {
+  color: green;
 }
 
-.serverResponseLabelError {
+.negativeChange {
   color: red;
 }
 
-/** Set ids using widget.getElement().setId("idOfElement") */
-#closeButton {
-  margin: 15px 6px 6px;
-}
