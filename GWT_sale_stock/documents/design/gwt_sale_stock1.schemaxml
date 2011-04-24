@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemadesigner version="6.5">
+<source>
+<database charset="latin1" collation="latin1_swedish_ci">gwt_sale_stock</database>
+</source>
+<canvas zoom="100">
+<tables>
+<table name="t_customer" view="colnames">
+<left>812</left>
+<top>335</top>
+<width>144</width>
+<height>140</height>
+<sql_create_table>CREATE TABLE `t_customer` (
+  `customer_id` int(11) NOT NULL auto_increment COMMENT '客户ID',
+  `customer_name` varchar(20) NOT NULL COMMENT '客户名称',
+  `customer_address` varchar(50) default NULL COMMENT '客户地址',
+  `customer_call` varchar(20) default NULL COMMENT '客户电话',
+  `flag` int(11) NOT NULL default '1' COMMENT '标志',
+  PRIMARY KEY  (`customer_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="t_customerback" view="colnames">
+<left>643</left>
+<top>224</top>
+<width>125</width>
+<height>162</height>
+<sql_create_table>CREATE TABLE `t_customerback` (
+  `custback_id` int(11) NOT NULL auto_increment COMMENT '客户退货单ID',
+  `cubcust_id` int(11) NOT NULL COMMENT '客户ID',
+  `cubuser_id` int(11) NOT NULL COMMENT '操作员ID',
+  `cubdate` varchar(20) NOT NULL COMMENT '退货日期',
+  `measures` varchar(50) default NULL COMMENT '处理措施',
+  `flag` int(11) NOT NULL default '1' COMMENT '标志',
+  PRIMARY KEY  (`custback_id`),
+  KEY `FK_t_customerback_user` (`cubuser_id`),
+  KEY `FK_t_customerback_customer` (`cubcust_id`),
+  CONSTRAINT `FK_t_customerback_customer` FOREIGN KEY (`cubcust_id`) REFERENCES `t_customer` (`customer_id`),
+  CONSTRAINT `FK_t_customerback_user` FOREIGN KEY (`cubuser_id`) REFERENCES `t_user` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="t_customerback_list" view="colnames">
+<left>447</left>
+<top>121</top>
+<width>164</width>
+<height>149</height>
+<sql_create_table>CREATE TABLE `t_customerback_list` (
+  `custback_list_id` int(11) NOT NULL auto_increment COMMENT '客户退货明细ID',
+  `custback _id` int(11) NOT NULL COMMENT '客户退货单ID',
+  `cubprod_list_id` int(11) NOT NULL COMMENT '产品ID ',
+  `cub_list_number` int(11) NOT NULL COMMENT '退货数量',
+  `cubreason` varchar(50) default NULL COMMENT '退货原因',
+  `flag` int(11) NOT NULL default '1' COMMENT '标志',
+  PRIMARY KEY  (`custback_list_id`),
+  KEY `FK_t_customerback_list_product` (`cubprod_list_id`),
+  KEY `FK_t_customerback_list_custback` (`custback _id`),
+  CONSTRAINT `FK_t_customerback_list_custback` FOREIGN KEY (`custback _id`) REFERENCES `t_customerback` (`custback_id`),
+  CONSTRAINT `FK_t_customerback_list_product` FOREIGN KEY (`cubprod_list_id`) REFERENCES `t_product` (`product_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="t_inventory_list" view="colnames">
+<left>64</left>
+<top>167</top>
+<width>144</width>
+<height>124</height>
+<sql_create_table>CREATE TABLE `t_inventory_list` (
+  `inventories_list_id` int(11) NOT NULL auto_increment COMMENT '入库明细ID',
+  `inventories_id` int(11) NOT NULL COMMENT '入库单ID',
+  `invproduct_id` int(11) NOT NULL COMMENT '产品ID',
+  `invnumber` int(11) NOT NULL COMMENT '产品数量',
+  `flag` int(11) NOT NULL default '1' COMMENT '标志',
+  PRIMARY KEY  (`inventories_list_id`),
+  KEY `FK_t_inventory_list_product` (`invproduct_id`),
+  KEY `FK_t_inventory_list_receipt` (`inventories_id`),
+  CONSTRAINT `FK_t_inventory_list_receipt` FOREIGN KEY (`inventories_id`) REFERENCES `t_receipt` (`receipt_id`),
+  CONSTRAINT `FK_t_inventory_list_product` FOREIGN KEY (`invproduct_id`) REFERENCES `t_product` (`product_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="t_product" view="colnames">
+<left>275</left>
+<top>409</top>
+<width>116</width>
+<height>152</height>
+<sql_create_table>CREATE TABLE `t_product` (
+  `product_id` int(11) NOT NULL auto_increment COMMENT '产品ID',
+  `pptype_id` int(11) NOT NULL COMMENT '产品类型ID',
+  `pname` varchar(50) NOT NULL COMMENT '产品名称',
+  `purchaseprice` int(20) default NULL COMMENT '产品进价',
+  `sellpirce` int(20) default NULL COMMENT '产品售价',
+  `flag` int(11) NOT NULL default '1' COMMENT '标志',
+  PRIMARY KEY  (`product_id`),
+  KEY `FK_t_product_ptype` (`pptype_id`),
+  CONSTRAINT `FK_t_product_ptype` FOREIGN KEY (`pptype_id`) REFERENCES `t_ptype` (`ptype_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="t_ptype" view="colnames">
+<left>496</left>
+<top>577</top>
+<width>109</width>
+<height>94</height>
+<sql_create_table>CREATE TABLE `t_ptype` (
+  `ptype_id` int(11) NOT NULL auto_increment COMMENT '类型ID',
+  `ptype_name` varchar(50) NOT NULL COMMENT '类型名',
+  PRIMARY KEY  (`ptype_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="t_purchase" view="colnames">
+<left>273</left>
+<top>288</top>
+<width>112</width>
+<height>112</height>
+<sql_create_table>CREATE TABLE `t_purchase` (
+  `purchase_id` int(11) NOT NULL auto_increment COMMENT '进货单ID',
+  `puuser_id` int(11) NOT NULL COMMENT '操作员ID ',
+  `pudate` varchar(20) default NULL COMMENT '进货日期',
+  `flag` int(11) NOT NULL COMMENT '标志',
+  PRIMARY KEY  (`purchase_id`),
+  KEY `FK_t_purchase_user` (`puuser_id`),
+  CONSTRAINT `FK_t_purchase_user` FOREIGN KEY (`puuser_id`) REFERENCES `t_user` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="t_purchaseback" view="colnames">
+<left>639</left>
+<top>679</top>
+<width>132</width>
+<height>136</height>
+<sql_create_table>CREATE TABLE `t_purchaseback` (
+  `pub_id` int(11) NOT NULL auto_increment COMMENT '进货退货单ID ',
+  `pubsub_id` int(11) NOT NULL COMMENT '供货商ID ',
+  `pubuser_id` int(11) NOT NULL COMMENT '操作员ID',
+  `pubdate` varchar(20) default NULL COMMENT '进货退货日期',
+  `flag` int(11) NOT NULL default '1' COMMENT '标志',
+  PRIMARY KEY  (`pub_id`),
+  KEY `FK_t_purchaseback_user` (`pubuser_id`),
+  KEY `FK_t_purchaseback_supply` (`pubsub_id`),
+  CONSTRAINT `FK_t_purchaseback_supply` FOREIGN KEY (`pubsub_id`) REFERENCES `t_supply` (`supply_id`),
+  CONSTRAINT `FK_t_purchaseback_user` FOREIGN KEY (`pubuser_id`) REFERENCES `t_user` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="t_receipt" view="colnames">
+<left>277</left>
+<top>147</top>
+<width>104</width>
+<height>136</height>
+<sql_create_table>CREATE TABLE `t_receipt` (
+  `receipt_id` int(11) NOT NULL auto_increment COMMENT '入库ID',
+  `reuser_id` int(11) NOT NULL COMMENT '操作员ID',
+  `redate` varchar(20) default NULL COMMENT '入库日期',
+  `retype` varchar(50) default NULL COMMENT '入库类型',
+  `flag` int(11) NOT NULL default '1' COMMENT '标志',
+  PRIMARY KEY  (`receipt_id`),
+  KEY `FK_t_receipt_user` (`reuser_id`),
+  CONSTRAINT `FK_t_receipt_user` FOREIGN KEY (`reuser_id`) REFERENCES `t_user` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="t_sale" view="colnames">
+<left>643</left>
+<top>396</top>
+<width>120</width>
+<height>133</height>
+<sql_create_table>CREATE TABLE `t_sale` (
+  `sale_id` int(11) NOT NULL auto_increment COMMENT '销售单ID',
+  `sauser_id` int(11) NOT NULL COMMENT '操作员ID',
+  `sacustomer_id` int(11) NOT NULL COMMENT '客户ID',
+  `sadate` varchar(20) default NULL COMMENT '销售日期',
+  `flag` int(11) NOT NULL default '1' COMMENT '标志',
+  PRIMARY KEY  (`sale_id`),
+  KEY `FK_t_sale_user` (`sauser_id`),
+  KEY `FK_t_sale_customer` (`sacustomer_id`),
+  CONSTRAINT `FK_t_sale_customer` FOREIGN KEY (`sacustomer_id`) REFERENCES `t_customer` (`customer_id`),
+  CONSTRAINT `FK_t_sale_user` FOREIGN KEY (`sauser_id`) REFERENCES `t_user` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="t_store" view="colnames">
+<left>87</left>
+<top>465</top>
+<width>104</width>
+<height>120</height>
+<sql_create_table>CREATE TABLE `t_store` (
+  `store_id` int(11) NOT NULL auto_increment,
+  `sproduct_id` int(11) NOT NULL,
+  `spnumber` int(11) default NULL,
+  `flag` int(11) default '1',
+  PRIMARY KEY  (`store_id`),
+  KEY `FK_t_store_product` (`sproduct_id`),
+  CONSTRAINT `FK_t_store_product` FOREIGN KEY (`sproduct_id`) REFERENCES `t_product` (`product_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="t_supply" view="colnames">
+<left>260</left>
+<top>566</top>
+<width>127</width>
+<height>142</height>
+<sql_create_table>CREATE TABLE `t_supply` (
+  `supply_id` int(11) NOT NULL auto_increment COMMENT '供应商ID ',
+  `supply_name` varchar(20) NOT NULL COMMENT '供应商名称',
+  `supply_address` varchar(50) default NULL COMMENT '供应商地址',
+  `supply_call` varchar(20) default NULL COMMENT '供应商电话 ',
+  `flag` int(11) NOT NULL COMMENT '标志',
+  PRIMARY KEY  (`supply_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="t_user" view="colnames">
+<left>472</left>
+<top>274</top>
+<width>100</width>
+<height>132</height>
+<sql_create_table>CREATE TABLE `t_user` (
+  `user_id` int(11) NOT NULL auto_increment COMMENT '操作员ID ',
+  `username` varchar(20) NOT NULL COMMENT '操作员姓名',
+  `userpwd` varchar(50) default NULL COMMENT '操作员密码',
+  `userauthor` int(11) NOT NULL COMMENT '操作员权限 ',
+  `flag` int(11) NOT NULL COMMENT '标志',
+  PRIMARY KEY  (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="t_purchase_list" view="colnames">
+<left>72</left>
+<top>304</top>
+<width>128</width>
+<height>149</height>
+<sql_create_table>CREATE TABLE `t_purchase_list` (
+  `purchase_list_id` int(11) NOT NULL COMMENT '进货明细ID',
+  `purchase _id` int(11) NOT NULL COMMENT '进货单ID',
+  `puproduct_id` int(11) NOT NULL COMMENT '产品ID',
+  `pusupply_id` int(11) NOT NULL COMMENT '供应商ID',
+  `punumber` int(11) NOT NULL COMMENT '进货数量',
+  `flag` int(11) NOT NULL default '1' COMMENT '标志',
+  PRIMARY KEY  (`purchase_list_id`),
+  KEY `FK_t_purchase_list_supply` (`pusupply_id`),
+  KEY `FK_t_purchase_list_product` (`puproduct_id`),
+  KEY `FK_t_purchase_list_purchase` (`purchase _id`),
+  CONSTRAINT `FK_t_purchase_list_purchase` FOREIGN KEY (`purchase _id`) REFERENCES `t_purchase` (`purchase_id`),
+  CONSTRAINT `FK_t_purchase_list_product` FOREIGN KEY (`puproduct_id`) REFERENCES `t_product` (`product_id`),
+  CONSTRAINT `FK_t_purchase_list_supply` FOREIGN KEY (`pusupply_id`) REFERENCES `t_supply` (`supply_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="t_purchaseback_list" view="colnames">
+<left>16</left>
+<top>661</top>
+<width>172</width>
+<height>156</height>
+<sql_create_table>CREATE TABLE `t_purchaseback_list` (
+  `pub_list_id` int(11) NOT NULL auto_increment COMMENT '进货退货明细ID',
+  `pub _id` int(11) NOT NULL COMMENT '进货退货单ID',
+  `pubprod_id` int(11) NOT NULL COMMENT '产品ID ',
+  `pubreson` varchar(50) default NULL COMMENT '进货退货原因',
+  `pubnumber` int(11) NOT NULL COMMENT '进货退货数量',
+  `flag` int(11) NOT NULL default '1' COMMENT '标志',
+  PRIMARY KEY  (`pub_list_id`),
+  KEY `FK_t_purchaseback_list_product` (`pubprod_id`),
+  KEY `FK_t_purchaseback_list_pub` (`pub _id`),
+  CONSTRAINT `FK_t_purchaseback_list_pub` FOREIGN KEY (`pub _id`) REFERENCES `t_purchaseback` (`pub_id`),
+  CONSTRAINT `FK_t_purchaseback_list_product` FOREIGN KEY (`pubprod_id`) REFERENCES `t_product` (`product_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="t_sale_list" view="colnames">
+<left>470</left>
+<top>413</top>
+<width>111</width>
+<height>158</height>
+<sql_create_table>CREATE TABLE `t_sale_list` (
+  `sale_list_id` int(11) NOT NULL auto_increment COMMENT '销售明细ID',
+  `sale _id` int(11) NOT NULL COMMENT '销售单ID',
+  `saproduct_id` int(11) NOT NULL COMMENT '产品ID',
+  `sanumber` int(11) NOT NULL COMMENT '销售数量',
+  `sapirce` int(20) NOT NULL COMMENT '销售价格',
+  `flag` int(11) NOT NULL default '1' COMMENT '标志',
+  PRIMARY KEY  (`sale_list_id`),
+  KEY `FK_t_sale_list_product` (`saproduct_id`),
+  KEY `FK_t_sale_list_sale` (`sale _id`),
+  CONSTRAINT `FK_t_sale_list_sale` FOREIGN KEY (`sale _id`) REFERENCES `t_sale` (`sale_id`),
+  CONSTRAINT `FK_t_sale_list_product` FOREIGN KEY (`saproduct_id`) REFERENCES `t_product` (`product_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+</tables>
+</canvas>
+</schemadesigner>
