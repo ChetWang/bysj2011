@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+   配置服务器端运行时所需要的参数
+-->
+<servers>
+<server>
+  <!--始终监听线程，用来见将局域网内主机互连-->
+  <init-listen-port>5074</init-listen-port>
+  
+   <!--接收消息端口-->
+  <recv-msg-port>5077</recv-msg-port>
+  
+  <!--消息监听接口端口-->
+  <listener-msg-port>6011</listener-msg-port>
+  <listener-msg-ip>127.0.0.1</listener-msg-ip>
+  
+  <!--接收文件端口列表，这里端口设定几个表示同时可以传输多少个文件-->
+  <recv-file-prots>
+     <port1>6001</port1>
+     <port2>6002</port2>
+     <port3>6003</port3>
+     <port4>6004</port4>
+     <port5>6005</port5>
+     <port6>6006</port6>
+     <port7>6007</port7>
+     <port8>6008</port8>
+     <port9>6009</port9>
+     <port10>6010</port10>
+     
+  </recv-file-prots>
+  
+ </server>
+</servers>
