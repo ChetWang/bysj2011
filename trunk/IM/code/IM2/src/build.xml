@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="Msk" default="run" basedir=".">
+
+<property name="src" value="."/>
+<property name="dist" value="../dist"/>
+<property name="build" value="../build"/>
+<property name="lib" value="../lib"/>
+<property name="doc" value="../doc"/>
+<property name="bin" value="../bin"/>
+
+ <!--指定公用类路径-->
+ <path id="project.path">
+	<pathelement path="${java.class.path}"/>
+	<pathelement location="${lib}/liquidlnf.jar"/>
+	<pathelement location="${lib}/nimrodlf.jar"/>
+	<pathelement path="${build}"/>
+ </path>
+
+<!--构建工程初始化-->
+<target name="init">
+    <!--删除所有编译文件-->
+    <delete includeEmptyDirs="false">
+               <fileset dir="${src}" includes="**/*.class"/>
+    </delete>
+	<!--复制配置文件-->
+	<copy todir="${build}" overwrite="true">
+		<fileset dir="${src}"  excludes="**/*.java"/>
+	</copy>
+	<!--建立目录-->
+  	<mkdir dir="${build}"/>
+	<mkdir dir="${dist}"/>
+	<mkdir dir="${lib}"/>
+</target>
+
+<!--编译所有源文件-->
+<target name="compile" depends="init">
+  	<javac srcdir="${src}" destdir="${build}">
+		<classpath refid="project.path"/>
+	</javac>
+</target>
+ 
+<!--打包jar-->
+<target name="jar" depends="compile">
+	<jar destfile="${dist}/Msk.jar" basedir="${build}" excludes="**/*.bak,**/*bat" manifest="${build}/MANIFEST.MF">	
+	</jar>
+</target>
+
+<!--生成doc文档-->
+<target name="doc" depends ="init">
+	<delete dir="${doc}"/>
+	<mkdir dir="${doc}"/>
+    <javadoc destdir="${doc}">
+		<classpath refid="project.path"/>
+		<fileset dir="${src}" includes="**/*.java"/>
+    </javadoc>
+</target>
+
+<!--运行程序-->
+<target name="run" depends="jar">
+     <delete dir="${bin}"/>
+	 <mkdir dir="${bin}"/>
+	 <copy todir="${bin}" overwrite="true">
+		<fileset dir="${lib}"  includes="**/*.jar"/>
+		<fileset dir="${dist}"  includes="**/*.jar"/>
+		<fileset dir="${src}"  includes="**/startup.bat"/>
+	</copy>
+	<exec dir="${bin}" executable="startup.bat"> 
+    </exec> 
+</target>
+
+</project>
