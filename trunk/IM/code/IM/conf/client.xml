@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+   配置客户端运行时所需要的参数
+-->
+<clients>
+
+ <client>
+  <!--客户端名称-->
+  <client-name>颜清国</client-name>
+   <!--客户端所在得组,不同得组别不能使用UDP广播-->
+  <client-group>239.255.8.0</client-group>
+  <multicast-localport>10008</multicast-localport>
+  <multicast-remoteport>10008</multicast-remoteport>
+  <startip>127.0.0.1</startip>
+  <endip>127.0.0.1</endip>
+ </client>
+ 
+</clients>

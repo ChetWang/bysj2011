@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+   配置客户端运行时所需要的参数
+-->
+<protocols>
+
+ <protocol>
+   <initonlinepc>com.sylinxsoft.csframework.server.HandInitOnlinePcMsg</initonlinepc>
+   <generalmsg>com.sylinxsoft.csframework.server.HandGeneralMsg</generalmsg>
+   <sendfile>com.sylinxsoft.csframework.server.HandSendFileMsg</sendfile>
+   <!--确认接收文件与否-->
+   <answersendfile>com.sylinxsoft.csframework.server.HandAnswerSendFile</answersendfile>
+   <cannelsendfile>com.sylinxsoft.csframework.server.HandCannelSendFile</cannelsendfile>
+ </protocol>
+ 
+</protocols>
